@@ -1,0 +1,13 @@
+ul.list {
+  list-style: none;
+}
+
+ul.list, ul.list > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+ul.list li {
+  padding: 0.5rem;
+}
