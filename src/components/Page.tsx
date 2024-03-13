@@ -6,7 +6,7 @@ import { EditModal } from "./EditModal";
 import shuffleLogo from '/shuffle.png';
 
 export const Page = () => {
-  const {items, shuffle, updateItems} = useContext(ListDataContext);
+  const {items, shuffle, unshuffle, updateItems} = useContext(ListDataContext);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const openDialog = () => {
@@ -21,6 +21,7 @@ export const Page = () => {
       </div>
       <div className="actions">
         <button className="btn action" onClick={() => shuffle()}>Shuffle</button>
+        <button className="btn action" onClick={() => unshuffle()}>Un-Shuffle</button>
         <button className='btn action' onClick={openDialog}>Edit List</button>
       </div>
       <div className="card-list">

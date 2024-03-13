@@ -6,6 +6,7 @@ interface ListDataContextValue {
   items: Item[],
   shuffledItems: Item[],
   shuffle: () => Item[],
+  unshuffle: () => Item[],
   updateItems: (items: Item[]) => void,
 }
 
@@ -13,6 +14,7 @@ export const ListDataContext = createContext<ListDataContextValue>({
   items: [],
   shuffledItems: [],
   shuffle: () => [],
+  unshuffle: () => [],
   updateItems: () => {}
 });
 
@@ -29,6 +31,11 @@ export const ListData = (props: { children: ReactNode }) => {
     return shuffled;
   }
 
+  const unshuffle = () => {
+    setShuffledItems([...items]);
+    return [...items];
+  }
+
   const updateItems = (updatedItems: Item[]) => {
     setItems(updatedItems);
     setShuffledItems(updatedItems);
@@ -36,7 +43,7 @@ export const ListData = (props: { children: ReactNode }) => {
   }
 
   const value = {
-    items, shuffledItems, shuffle, updateItems
+    items, shuffledItems, shuffle, unshuffle, updateItems
   };
 
   useEffect(() => {
