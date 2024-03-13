@@ -32,6 +32,10 @@ export const EditModal = (props: EditModalProps) => {
     ]);
   }
 
+  const removeItem = (id: string) => {
+    setUpdatedItems(updatedItems.filter(x => x.id !== id));
+  }
+
   const editItem = (item: Item) => {
     const updated = updatedItems.map(x => x.id === item.id ? item : x);
     setUpdatedItems(updated);
@@ -40,7 +44,7 @@ export const EditModal = (props: EditModalProps) => {
   return (
     <form method="dialog flex col">
       <div className="flex col">
-        {updatedItems.map(x => <EditItem item={x} key={x.id} onChange={editItem} />)}
+        {updatedItems.map(x => <EditItem item={x} key={x.id} onChange={editItem} removeItem={removeItem}/>)}
         <div className="flex row">
           <button type="button" className="btn" onClick={addItem}>Add</button>
         </div>
@@ -57,10 +61,11 @@ export const EditModal = (props: EditModalProps) => {
 interface EditItemProps {
   item: Item;
   onChange: (item: Item) => void;
+  removeItem: (id: string) => void;
 };
 
 const EditItem = (props: EditItemProps) => {
-  const {item } = props;
+  const {item, removeItem } = props;
   const [value, setValue] = useState(item.name);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,7 +89,8 @@ const EditItem = (props: EditItemProps) => {
   }
 
   return <div className="flex row">
-    <input value={value} onChange={onChange} onBlur={onBlur}/>
+    <input style={{flex: 1}} value={value} onChange={onChange} onBlur={onBlur}/>
     <input type="color" value={item.color} onChange={changeColor}/>
+    <button type="button" onClick={() => removeItem(item.id)}>X</button>
   </div>
 }
