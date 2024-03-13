@@ -4,10 +4,7 @@ import "./List.css";
 import { useContext } from 'react';
 import { ListDataContext } from '../list-data-context';
 
-interface ListViewProps {
-}
-
-export const ListView = (props: ListViewProps) => {
+export const ListView = () => {
   const { shuffledItems } = useContext(ListDataContext);
   return <ul className="list">
     <FlipMove>
