@@ -2,14 +2,23 @@ import { forwardRef } from "react";
 import { Item } from "../types"
 
 interface ItemProps {
-  item: Item
+  item: Item,
+  isHidden: boolean,
+  onClick: () => void
 }
 
 export const ItemView = forwardRef<HTMLLIElement, ItemProps>((props: ItemProps, ref) => {
-  const { color, name } = props.item;
+  const { item, isHidden, onClick } = props;
+  const { color, name } = item;
   return (
-    <li style={{backgroundColor: color}} ref={ref}>
-      {name}
+    <li ref={ref} role="button">
+      <div 
+        className={`content ${isHidden ? 'hidden' : ''}`} 
+        style={{backgroundColor: color}}
+        onClick={onClick}
+      >
+        {name}
+      </div>
     </li>
   );
 });

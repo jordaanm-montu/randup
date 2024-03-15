@@ -42,7 +42,11 @@ export const EditModal = (props: EditModalProps) => {
   return (
     <form method="dialog flex col">
       <div className="flex col">
-        {updatedItems.map(x => <EditItem item={x} key={x.id} onChange={editItem} removeItem={removeItem}/>)}
+        {updatedItems.map(x => <EditItem 
+          item={x} key={x.id}
+          onChange={editItem}
+          removeItem={removeItem}
+        />)}
         <div className="flex row">
           <button type="button" className="btn action" onClick={addItem}>+</button>
         </div>
@@ -52,7 +56,7 @@ export const EditModal = (props: EditModalProps) => {
         <button className="btn action">cancel</button>
       </div>
       <datalist id="palette">
-        {paletteColors.map(x => <option value={x} />)}
+        {paletteColors.map(x => <option key={x} value={x} />)}
       </datalist>
     </form>
   );

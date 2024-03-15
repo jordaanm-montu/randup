@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
-import { Item } from "./types";
+import { Item } from "../types";
 import _ from 'lodash';
+import { HiddenItemProvider } from "./hidden-item.context";
 
 interface ListDataContextValue {
   items: Item[],
@@ -59,7 +60,9 @@ export const ListData = (props: { children: ReactNode }) => {
 
   return (
     <ListDataContext.Provider value={value}>
-      { hasLoaded  ? children: null }
+      <HiddenItemProvider>
+        { hasLoaded  ? children: null }
+      </HiddenItemProvider>
     </ListDataContext.Provider>
   )
 }

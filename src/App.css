@@ -32,11 +32,22 @@
 }
 
 .card-list li {
-  font-size: 1.25rem;
   font-weight: 500;
-  text-shadow: 1px 1px #222;
-  border-radius: 0.5rem;
   font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.card-list li .content {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  text-shadow: 1px 1px #222;
+  transition: all 0.2s;
+}
+
+.card-list li .content.hidden {
+  background-color: #444!important;
+  color: #444;
+  text-shadow: none;
 }
 
 .actions {
