@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Item } from "../types";
 import { v4 as uuidv4 } from 'uuid';
+import { paletteColors } from "../data";
 
 interface EditModalProps {
   items: Item[];
@@ -8,11 +9,8 @@ interface EditModalProps {
 }
 
 const randomColor = () => {
-  const r = Math.floor(Math.random() * 256);
-  const g = Math.floor(Math.random() * 256);
-  const b = Math.floor(Math.random() * 256);
-
-  return `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`;
+  const index = Math.floor(Math.random() * paletteColors.length);
+  return paletteColors[index];
 }
 
 export const EditModal = (props: EditModalProps) => {
@@ -46,13 +44,16 @@ export const EditModal = (props: EditModalProps) => {
       <div className="flex col">
         {updatedItems.map(x => <EditItem item={x} key={x.id} onChange={editItem} removeItem={removeItem}/>)}
         <div className="flex row">
-          <button type="button" className="btn" onClick={addItem}>Add</button>
+          <button type="button" className="btn action" onClick={addItem}>+</button>
         </div>
       </div>
       <div className="actions flex row">
-        <button onClick={() => onSave(updatedItems)}>save</button>
-        <button>cancel</button>
+        <button onClick={() => onSave(updatedItems)} className="btn action">save</button>
+        <button className="btn action">cancel</button>
       </div>
+      <datalist id="palette">
+        {paletteColors.map(x => <option value={x} />)}
+      </datalist>
     </form>
   );
 }
@@ -90,7 +91,7 @@ const EditItem = (props: EditItemProps) => {
 
   return <div className="flex row">
     <input style={{flex: 1}} value={value} onChange={onChange} onBlur={onBlur}/>
-    <input type="color" value={item.color} onChange={changeColor}/>
-    <button type="button" onClick={() => removeItem(item.id)}>X</button>
+    <input type="color" value={item.color} onChange={changeColor} list="palette" />
+    <button type="button" className="btn action" onClick={() => removeItem(item.id)}>✕</button>
   </div>
 }

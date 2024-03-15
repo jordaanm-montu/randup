@@ -14,7 +14,7 @@ export const Page = () => {
   }
 
   return (
-    <>
+    <div className="page">
       <div className='flex center'>
         <img src={shuffleLogo} className="logo" alt="Shuffle logo" />
         <h1>Rand Up</h1>
@@ -32,6 +32,6 @@ export const Page = () => {
           <EditModal items={items} onSave={updateItems}/>
         </form>
       </dialog>
-    </>
+    </div>
   );
 }
