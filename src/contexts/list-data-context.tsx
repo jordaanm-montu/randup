@@ -49,7 +49,7 @@ export const ListData = (props: { children: ReactNode }) => {
 
   useEffect(() => {
     const saved = localStorage.getItem('randupItems');
-    let savedItems = JSON.parse(saved || '[]');
+    const savedItems = JSON.parse(saved || '[]');
     if(savedItems && Array.isArray(savedItems)) {
       setItems(savedItems);
       setShuffledItems(savedItems);

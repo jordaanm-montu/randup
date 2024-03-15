@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react"
+import { useContext, useRef } from "react"
 import { ListDataContext } from "../contexts/list-data-context"
 import { ListView } from "./List";
 import { EditModal } from "./EditModal";

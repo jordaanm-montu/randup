@@ -67,7 +67,7 @@ interface EditItemProps {
   item: Item;
   onChange: (item: Item) => void;
   removeItem: (id: string) => void;
-};
+}
 
 const EditItem = (props: EditItemProps) => {
   const {item, removeItem } = props;

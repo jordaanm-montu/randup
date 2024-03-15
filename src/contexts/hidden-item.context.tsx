@@ -10,10 +10,10 @@ interface HiddenItemContextValue {
 
 export const HiddenItemContext = createContext<HiddenItemContextValue>({
   hiddenIds: [],
-  hideItems: (ids: string[]) => {},
-  showItems: (ids: string[]) => {},
+  hideItems: () => {},
+  showItems: () => {},
   showAll: () => {},
-  isHidden: (id: string) => false,
+  isHidden: () => false,
 });
 
 export const HiddenItemProvider = (props: {children: ReactNode }) => {
