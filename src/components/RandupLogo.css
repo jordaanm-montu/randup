@@ -21,6 +21,9 @@
   top: 0;
   bottom: 0;
   background-color: #242424;
+  transition-property: opacity;
+  transition-duration: 0.25s;
+  transition-timing-function: ease-in-out;
 }
 
 .block-1 {
@@ -45,6 +48,10 @@
 .block-5 {
   background-color: #3288bd;
   transition-delay: 400ms;
+}
+
+.randup-stack:hover .black {
+  opacity: 0;
 }
 
 /* 1 -> 4 */
