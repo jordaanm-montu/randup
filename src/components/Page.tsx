@@ -5,10 +5,16 @@ import { EditModal } from "./EditModal";
 
 import shuffleLogo from '/shuffle.png';
 import { HiddenItemContext } from "../contexts/hidden-item.context";
+import { Item } from "../types";
 
 export const Page = () => {
   const listData = useContext(ListDataContext);
-  const {items, shuffle, unshuffle, updateItems} = listData;
+  const {items, linkTemplate, shuffle, unshuffle, updateItems, updateLinkTemplate} = listData;
+
+  const updateSettings = (updatedItems: Item[], updatedLinkTemplate: string) => {
+    updateItems(updatedItems);
+    updateLinkTemplate(updatedLinkTemplate);
+  }
 
   const hiddenItemData = useContext(HiddenItemContext);
   const { hideItems, showAll } = hiddenItemData;
@@ -32,7 +38,7 @@ export const Page = () => {
       <div className="actions">
         <button className="btn action" onClick={() => shuffle()}>Shuffle</button>
         <button className="btn action" onClick={() => unshuffle()}>Un-Shuffle</button>
-        <button className='btn action' onClick={openDialog}>Edit List</button>
+        <button className='btn action' onClick={openDialog}>Edit</button>
         <button className="btn action" onClick={hideAll}>Hide All</button>
         <button className="btn action" onClick={showAll}>Show All</button>
       </div>
@@ -40,7 +46,7 @@ export const Page = () => {
         <ListView />
       </div>
       <dialog className="modal centered" ref={dialogRef}>
-        <EditModal items={items} onSave={updateItems}/>
+        <EditModal items={items} linkTemplate={linkTemplate} onSave={updateSettings}/>
       </dialog>
     </div>
   );

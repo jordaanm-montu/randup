@@ -6,7 +6,7 @@ import { ListDataContext } from '../contexts/list-data-context';
 import { HiddenItemContext } from '../contexts/hidden-item.context';
 
 export const ListView = () => {
-  const { shuffledItems } = useContext(ListDataContext);
+  const { shuffledItems, linkTemplate } = useContext(ListDataContext);
   const { isHidden, showItems, hideItems } = useContext(HiddenItemContext);
 
   const toggleItem = (id: string) => {
@@ -21,6 +21,7 @@ export const ListView = () => {
     <FlipMove>
       {shuffledItems.map(x => <ItemView 
         key={x.name}
+        linkTemplate={linkTemplate}
         item={x}
         isHidden={isHidden(x.id)}
         onClick={() => toggleItem(x.id)}

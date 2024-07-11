@@ -38,6 +38,7 @@
 }
 
 .card-list li .content {
+  flex: 1;
   padding: 0.5rem;
   border-radius: 0.5rem;
   text-shadow: 1px 1px #222;
@@ -48,6 +49,16 @@
   background-color: #444!important;
   color: #444;
   text-shadow: none;
+}
+
+.card-list li .link-container {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  text-shadow: 1px 1px #222;
+}
+
+.card-list li .content.hidden + .link-container {
+  visibility: hidden;
 }
 
 .actions {
