@@ -3,7 +3,6 @@ import { ListDataContext } from "../contexts/list-data-context"
 import { ListView } from "./List";
 import { EditModal } from "./EditModal";
 
-import shuffleLogo from '/shuffle.png';
 import { HiddenItemContext } from "../contexts/hidden-item.context";
 import { Item } from "../types";
 import { RandupLogo } from "./RandupLogo";
