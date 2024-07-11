@@ -10,7 +10,9 @@
   height: 14px;
   width: 100%;
   transform: translateY(0);
-  transition: 0.5s all;
+  transition-duration: 0.5s;
+  transition-property: transform;
+  transition-timing-function: ease-in-out;
   position: relative;
 }
 
@@ -27,18 +29,22 @@
 
 .block-2 {
   background-color: #f46d43;
+  transition-delay: 100ms;
 }
 
 .block-3 {
   background-color: #fee08b;
+  transition-delay: 200ms;
 }
 
 .block-4 {
   background-color: #abdda4;
+  transition-delay: 300ms;
 }
 
 .block-5 {
   background-color: #3288bd;
+  transition-delay: 400ms;
 }
 
 /* 1 -> 4 */
