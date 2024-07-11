@@ -6,6 +6,7 @@ import { EditModal } from "./EditModal";
 import shuffleLogo from '/shuffle.png';
 import { HiddenItemContext } from "../contexts/hidden-item.context";
 import { Item } from "../types";
+import { RandupLogo } from "./RandupLogo";
 
 export const Page = () => {
   const listData = useContext(ListDataContext);
@@ -32,7 +33,8 @@ export const Page = () => {
   return (
     <div className="page">
       <div className='flex center'>
-        <img src={shuffleLogo} className="logo" alt="Shuffle logo" />
+        <RandupLogo/>
+        {/* <img src={shuffleLogo} className="logo" alt="Shuffle logo" /> */}
         <h1>Rand Up</h1>
       </div>
       <div className="actions">

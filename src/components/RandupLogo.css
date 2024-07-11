@@ -1,0 +1,69 @@
+.randup-stack {
+  width: 80px;
+  gap: 2px;
+  display: flex;
+  flex-direction: column;
+}
+
+.randup-stack .logo-block {
+  border-radius: 4px;
+  height: 14px;
+  width: 100%;
+  transform: translateY(0);
+  transition: 0.5s all;
+  position: relative;
+}
+
+.black {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background-color: #242424;
+}
+
+.block-1 {
+  background-color: #9e0142;
+}
+
+.block-2 {
+  background-color: #f46d43;
+}
+
+.block-3 {
+  background-color: #fee08b;
+}
+
+.block-4 {
+  background-color: #abdda4;
+}
+
+.block-5 {
+  background-color: #3288bd;
+}
+
+/* 1 -> 4 */
+.randup-stack:hover .block-1 {
+  transform: translateY(48px);
+}
+
+/* 2 -> 3 */
+.randup-stack:hover .block-2 {
+  transform: translateY(16px);
+}
+
+/* 3 -> 5 */
+.randup-stack:hover .block-3 {
+  transform: translateY(32px);
+}
+
+
+/* 4 -> 2 */
+.randup-stack:hover .block-4 {
+  transform: translateY(-32px);
+}
+
+/* 5 -> 1 */
+.randup-stack:hover .block-5 {
+  transform: translateY(-64px);
+}
+
