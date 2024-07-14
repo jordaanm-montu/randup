@@ -1,4 +1,4 @@
-import './RandupLogo.css';
+import './RandupLogo.scss';
 
 export const RandupLogo = () => {
 

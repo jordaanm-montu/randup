@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 import { Page } from './components/Page';
 import { ListData } from './contexts/list-data-context';
 
