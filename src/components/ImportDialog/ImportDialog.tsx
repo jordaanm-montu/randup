@@ -1,12 +1,11 @@
 import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { styled } from '@mui/material/styles';
 import React, { useContext, useState } from 'react';
 import { ListDataContext } from '../../contexts/list-data-context';
-import { Item } from '../../types';
 
 const ImportTextArea = styled('textarea')`
   width: 100%;
@@ -50,31 +49,6 @@ const readFile = async (file: File): Promise<string> => {
   });
 }
 
-type ImportCallback = (settings: Partial<Settings>) => void;
-
-const importSettingsFromFile = async (callback: ImportCallback) => {
-  try {
-    const file = await loadFileAsync();
-    const text = await readFile(file);
-    const json = JSON.parse(text);
-    const settings = {
-      items: json.items || undefined,
-      linkTemplate: json.linkTemplate || undefined
-    };
-    callback(settings);
-  } catch {
-    console.error("Unable to load file");
-    // TODO: TOAST NOTIFICATION?
-  }
-}
-
-
-interface Settings {
-  items: Item[],
-  linkTemplate: string
-}
-
-
 interface ImportDialogProps {
   onClose: () => void;
   isOpen: boolean;
@@ -93,17 +67,11 @@ export const ImportDialog = (props: ImportDialogProps) => {
     setText(newText);
   };
 
-  const importFromFile = async () => {
+  const loadFromFile = async () => {
     try {
-      await importSettingsFromFile(settings => {
-        if(settings.items){
-          updateItems(settings.items);
-        }
-        if(settings.linkTemplate) {
-          updateLinkTemplate(settings.linkTemplate);
-        }
-      });
-      onClose();
+      const file = await loadFileAsync();
+      const text = await readFile(file);
+      setText(text);
     } catch (e) {
       console.error(e);
     }
@@ -118,7 +86,8 @@ export const ImportDialog = (props: ImportDialogProps) => {
       }
       if(settings.linkTemplate) {
         updateLinkTemplate(settings.linkTemplate);
-      } 
+      }
+      onClose();
     } catch(e) {
       console.error(e);
     }
@@ -131,8 +100,8 @@ export const ImportDialog = (props: ImportDialogProps) => {
         <ImportTextArea value={text} onChange={onTextChange} />
       </DialogContent>
       <DialogActions>
+        <Button onClick={loadFromFile}>Load from File</Button>
         <Button onClick={importFromText}>Import From Text</Button>
-        <Button onClick={importFromFile}>Import from File</Button>
         <Button variant="contained" onClick={onClose}>
           Close
         </Button>

@@ -1,18 +1,17 @@
-import { v4 as uuidv4 } from 'uuid';
 import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { v4 as uuidv4 } from 'uuid';
 // import CloseIcon from '@mui/icons-material/Close';
 import { useContext, useEffect, useState } from 'react';
 import { ListDataContext } from '../../contexts/list-data-context';
-import { Item } from '../../types';
 import { paletteColors } from '../../data';
-import { EditItem } from './EditItem';
+import { Item } from '../../types';
 import { ExportDialog } from '../ExportDialog/ExportDialog';
 import { ImportDialog } from '../ImportDialog/ImportDialog';
+import { EditItem } from './EditItem';
 
 const randomColor = () => {
   const index = Math.floor(Math.random() * paletteColors.length);
@@ -35,6 +34,12 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
 
   const [updatedItems, setUpdatedItems] = useState(items);
   const [updatedLinkTemplate, setUpdatedLinkTemplate] = useState<string>(linkTemplate);
+
+  const onImportClosed = () => {
+    setImportIsOpen(false);
+    setIsOpen(false);
+  }
+
 
   useEffect(() => {
     setUpdatedItems(items);
@@ -122,7 +127,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
           </DialogActions>
       </Dialog>
       <ExportDialog isOpen={exportIsOpen} onClose={() => setExportIsOpen(false)} />
-      <ImportDialog isOpen={importIsOpen} onClose={() => setImportIsOpen(false)} />
+      <ImportDialog isOpen={importIsOpen} onClose={onImportClosed} />
     </>
   )
 }
