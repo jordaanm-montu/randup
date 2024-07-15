@@ -6,12 +6,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 // import CloseIcon from '@mui/icons-material/Close';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { ListDataContext } from '../../contexts/list-data-context';
 import { Item } from '../../types';
 import { paletteColors } from '../../data';
 import { EditItem } from './EditItem';
 import { ExportDialog } from '../ExportDialog/ExportDialog';
+import { ImportDialog } from '../ImportDialog/ImportDialog';
 
 const randomColor = () => {
   const index = Math.floor(Math.random() * paletteColors.length);
@@ -27,12 +28,18 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   const { isOpen, setIsOpen } = props;
 
   const [exportIsOpen, setExportIsOpen] = useState(false);
+  const [importIsOpen, setImportIsOpen] = useState(false);
 
   const listData = useContext(ListDataContext);
   const {items, linkTemplate, updateItems, updateLinkTemplate} = listData;
 
   const [updatedItems, setUpdatedItems] = useState(items);
   const [updatedLinkTemplate, setUpdatedLinkTemplate] = useState<string>(linkTemplate);
+
+  useEffect(() => {
+    setUpdatedItems(items);
+    setUpdatedLinkTemplate(linkTemplate);
+  }, [items, linkTemplate])
 
   const addItem = () => {
     const newItem: Item = {
@@ -72,6 +79,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
   };
 
   const openExportDialog = () => { setExportIsOpen(true); };
+  const openImportDialog = () => { setImportIsOpen(true); };
 
   return (
     <>
@@ -102,6 +110,9 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
             <Button onClick={openExportDialog}>
               Export
             </Button>
+            <Button onClick={openImportDialog}>
+              Import
+            </Button>
             <Button variant='contained' autoFocus onClick={handleSave}>
               Save
             </Button>
@@ -111,6 +122,7 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
           </DialogActions>
       </Dialog>
       <ExportDialog isOpen={exportIsOpen} onClose={() => setExportIsOpen(false)} />
+      <ImportDialog isOpen={importIsOpen} onClose={() => setImportIsOpen(false)} />
     </>
   )
 }

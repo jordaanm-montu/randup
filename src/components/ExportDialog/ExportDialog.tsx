@@ -54,6 +54,6 @@ export const ExportDialog = (props: ExportDialogProps) => {
         </Button>
       </DialogActions>
     </Dialog>
-  )
+  );
 }
 
