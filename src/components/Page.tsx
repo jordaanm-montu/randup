@@ -1,28 +1,22 @@
-import { useContext, useRef } from "react"
+import { useContext, useState } from "react"
 import { ListDataContext } from "../contexts/list-data-context"
 import { ListView } from "./List";
-import { EditModal } from "./EditModal";
 
 import { HiddenItemContext } from "../contexts/hidden-item.context";
-import { Item } from "../types";
 import { RandupLogo } from "./RandupLogo";
+import { SettingsDialog } from "./SettingsDialog/SettingsDialog";
 
 export const Page = () => {
   const listData = useContext(ListDataContext);
-  const {items, linkTemplate, shuffle, unshuffle, updateItems, updateLinkTemplate} = listData;
+  const {items, shuffle, unshuffle} = listData;
 
-  const updateSettings = (updatedItems: Item[], updatedLinkTemplate: string) => {
-    updateItems(updatedItems);
-    updateLinkTemplate(updatedLinkTemplate);
-  }
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
   const hiddenItemData = useContext(HiddenItemContext);
   const { hideItems, showAll } = hiddenItemData;
 
-  const dialogRef = useRef<HTMLDialogElement>(null);
-
   const openDialog = () => {
-    dialogRef.current?.showModal();
+    setIsSettingsModalOpen(true);
   }
 
   const hideAll = () => {
@@ -46,9 +40,7 @@ export const Page = () => {
       <div className="card-list">
         <ListView />
       </div>
-      <dialog className="modal centered" ref={dialogRef}>
-        <EditModal items={items} linkTemplate={linkTemplate} onSave={updateSettings}/>
-      </dialog>
+      <SettingsDialog isOpen={isSettingsModalOpen} setIsOpen={setIsSettingsModalOpen} />
     </div>
   );
 }
