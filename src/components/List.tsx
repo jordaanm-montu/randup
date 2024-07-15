@@ -1,9 +1,25 @@
 import FlipMove from 'react-flip-move';
+import { styled } from '@mui/material';
 import { ItemView } from './ItemView';
-import "./List.css";
 import { useContext } from 'react';
 import { ListDataContext } from '../contexts/list-data-context';
 import { HiddenItemContext } from '../contexts/hidden-item.context';
+
+const StyledList = styled('ul')`
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  & > div {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+  }
+`
 
 export const ListView = () => {
   const { shuffledItems, linkTemplate } = useContext(ListDataContext);
@@ -17,7 +33,7 @@ export const ListView = () => {
     }
   }
 
-  return <ul className="list">
+  return <StyledList>
     <FlipMove>
       {shuffledItems.map(x => <ItemView 
         key={x.name}
@@ -27,5 +43,5 @@ export const ListView = () => {
         onClick={() => toggleItem(x.id)}
       />)}
     </FlipMove>
-  </ul>
+  </StyledList>
 }
