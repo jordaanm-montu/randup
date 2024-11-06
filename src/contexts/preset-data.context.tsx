@@ -1,5 +1,5 @@
 import { PropsWithChildren, createContext, useEffect, useState } from "react";
-import { Preset, Item, PresetSaveData } from "../types";
+import { Preset, PresetSaveData } from "../types";
 import {
   DEFAULT_PRESET_DATA,
   loadPresetsFromStorage,
@@ -10,9 +10,10 @@ interface IPresetContext {
   data: PresetSaveData;
   getActivePreset: () => Preset;
   setActivePreset: (name: string) => void;
-  updatePreset: (presetName: string, items: Item[], template: string) => void;
+  updatePreset: (presetName: string, updatedPreset: Preset) => void;
   setData: (data: PresetSaveData) => void;
   addPreset: (presetName: string) => void;
+  removePreset: (presetName: string) => void;
   renamePreset: (presetName: string, newName: string) => void;
 }
 const noOp = () => {};
@@ -24,6 +25,7 @@ export const PresetDataContext = createContext<IPresetContext>({
   updatePreset: noOp,
   setData: noOp,
   addPreset: noOp,
+  removePreset: noOp,
   renamePreset: noOp,
 });
 
@@ -51,24 +53,16 @@ export const PresetData = (props: PropsWithChildren) => {
     setAndSavePresetData(updatedData);
   };
 
-  const updatePreset = (
-    presetName: string,
-    items: Item[],
-    linkTemplate: string
-  ) => {
+  const updatePreset = (presetName: string, updatedPreset: Preset) => {
     if (!presetData?.presets.some((preset) => preset.name === presetName)) {
       return;
     }
 
     const updatedPresets: Preset[] = presetData.presets.map((preset) => {
       if (preset.name !== presetName) {
-        return preset;
+        return { ...preset };
       } else {
-        return {
-          name: presetName,
-          items,
-          linkTemplate,
-        };
+        return updatedPreset;
       }
     });
 
@@ -90,6 +84,16 @@ export const PresetData = (props: PropsWithChildren) => {
     const updatedPresetData: PresetSaveData = {
       ...presetData,
       presets: [...presetData.presets, newPreset],
+    };
+
+    setAndSavePresetData(updatedPresetData);
+  };
+
+  const removePreset = (presetName: string) => {
+    if (!presetData) return;
+    const updatedPresetData = {
+      ...presetData,
+      presets: presetData.presets.filter((x) => x.name !== presetName),
     };
 
     setAndSavePresetData(updatedPresetData);
@@ -149,6 +153,7 @@ export const PresetData = (props: PropsWithChildren) => {
     updatePreset,
     setData,
     addPreset,
+    removePreset,
     renamePreset,
     getActivePreset,
   };

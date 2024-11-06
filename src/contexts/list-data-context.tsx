@@ -10,15 +10,12 @@ import _ from "lodash";
 import { HiddenItemProvider } from "./hidden-item.context";
 import { PresetDataContext } from "./preset-data.context";
 
-const noOp = () => {};
-
 interface ListDataContextValue {
   items: Item[];
   linkTemplate: string;
   shuffledItems: Item[];
   shuffle: () => Item[];
   unshuffle: () => Item[];
-  updateItemsAndLinkTemplate: (items: Item[], linkTemplate: string) => void;
 }
 
 export const ListDataContext = createContext<ListDataContextValue>({
@@ -27,7 +24,6 @@ export const ListDataContext = createContext<ListDataContextValue>({
   shuffledItems: [],
   shuffle: () => [],
   unshuffle: () => [],
-  updateItemsAndLinkTemplate: noOp,
 });
 
 export const ListData = (props: { children: ReactNode }) => {
@@ -50,24 +46,12 @@ export const ListData = (props: { children: ReactNode }) => {
     return [...items];
   };
 
-  const updateItemsAndLinkTemplate = (
-    updatedItems: Item[],
-    updatedLinkTemplate: string
-  ) => {
-    presetContext.updatePreset(
-      presetContext.data.activePreset,
-      updatedItems,
-      updatedLinkTemplate
-    );
-  };
-
   const value = {
     items,
     shuffledItems,
     shuffle,
     unshuffle,
     linkTemplate,
-    updateItemsAndLinkTemplate,
   };
 
   useEffect(() => {

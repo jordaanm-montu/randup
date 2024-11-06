@@ -3,22 +3,15 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { v4 as uuidv4 } from "uuid";
 // import CloseIcon from '@mui/icons-material/Close';
-import { useContext, useEffect, useState } from "react";
-import { ListDataContext } from "../../contexts/list-data-context";
+import { Checkbox, Divider } from "@mui/material";
+import { useContext, useState } from "react";
+import { PresetDataContext } from "../../contexts/preset-data.context";
 import { paletteColors } from "../../data";
-import { Item } from "../../types";
+import { Preset } from "../../types";
 import { ExportDialog } from "../ExportDialog/ExportDialog";
 import { ImportDialog } from "../ImportDialog/ImportDialog";
-import { EditItem } from "./EditItem";
-import { PresetDataContext } from "../../contexts/preset-data.context";
-import { Divider, FormLabel, MenuItem, Select } from "@mui/material";
-
-const randomColor = () => {
-  const index = Math.floor(Math.random() * paletteColors.length);
-  return paletteColors[index];
-};
+import { PresetEditDialog } from "../PresetEditDialog/PresetEditDialog";
 
 interface SettingsDialogProps {
   isOpen: boolean;
@@ -28,57 +21,27 @@ interface SettingsDialogProps {
 export const SettingsDialog = (props: SettingsDialogProps) => {
   const { isOpen, setIsOpen } = props;
 
+  const [openListDialog, setOpenListDialog] = useState<string>("");
+
   const [exportIsOpen, setExportIsOpen] = useState(false);
   const [importIsOpen, setImportIsOpen] = useState(false);
 
   const presetDataContext = useContext(PresetDataContext);
-  const listData = useContext(ListDataContext);
-  const { items, linkTemplate, updateItemsAndLinkTemplate } = listData;
 
-  const [updatedItems, setUpdatedItems] = useState(items);
-  const [updatedLinkTemplate, setUpdatedLinkTemplate] =
-    useState<string>(linkTemplate);
+  const removePreset = (name: string) => {
+    presetDataContext.removePreset(name);
+  };
+
+  const addNewPreset = () => {
+    presetDataContext.addPreset("New Preset");
+  };
 
   const onImportClosed = () => {
     setImportIsOpen(false);
     setIsOpen(false);
   };
 
-  useEffect(() => {
-    setUpdatedItems(items);
-    setUpdatedLinkTemplate(linkTemplate);
-  }, [items, linkTemplate]);
-
-  const addItem = () => {
-    const newItem: Item = {
-      id: uuidv4(),
-      name: "New",
-      color: randomColor(),
-      linkedId: "",
-    };
-
-    setUpdatedItems([...updatedItems, newItem]);
-  };
-
-  const removeItem = (id: string) => {
-    setUpdatedItems(updatedItems.filter((x) => x.id !== id));
-  };
-
-  const editItem = (item: Item) => {
-    const updated = updatedItems.map((x) => (x.id === item.id ? item : x));
-    setUpdatedItems(updated);
-  };
-
-  const onLinkTemplateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUpdatedLinkTemplate(e.target.value || "");
-  };
-
   const handleClose = () => {
-    setIsOpen(false);
-  };
-
-  const handleSave = () => {
-    updateItemsAndLinkTemplate(updatedItems, updatedLinkTemplate);
     setIsOpen(false);
   };
 
@@ -89,52 +52,49 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
     setImportIsOpen(true);
   };
 
+  const setActivePreset = (presetName: string) => {
+    presetDataContext.setActivePreset(presetName);
+  };
+  const closeListDialog = () => setOpenListDialog("");
+
   return (
     <>
       <Dialog open={isOpen}>
         <DialogTitle>Edit Settings</DialogTitle>
         <DialogContent dividers>
-          <Divider>Presets</Divider>
-          <div className="flex row center">
-            <Select value={presetDataContext.data.activePreset}>
-              {presetDataContext.data.presets.map((preset) => (
-                <MenuItem key={preset.name} value={preset.name}>
-                  {preset.name}
-                </MenuItem>
-              ))}
-            </Select>
-            <Button variant="outlined" type="button" color="secondary">
-              Rename
-            </Button>
-            <Button variant="outlined" type="button" color="secondary">
-              New
-            </Button>
-          </div>
-          <Divider>Current List</Divider>
           <div className="flex col">
-            {updatedItems.map((x) => (
-              <EditItem
-                item={x}
-                key={x.id}
-                onChange={editItem}
-                removeItem={removeItem}
-              />
-            ))}
-            <div className="flex row">
-              <Button variant="contained" onClick={addItem}>
-                Add Item
-              </Button>
+            <div className="flex col">
+              {presetDataContext.data.presets.map((preset) => {
+                const savePreset = (updatedPreset: Preset) => {
+                  closeListDialog();
+                  presetDataContext.updatePreset(preset.name, updatedPreset);
+                };
+                return (
+                  <div key={preset.name} className="flex row center">
+                    <Checkbox
+                      checked={
+                        preset.name === presetDataContext.data.activePreset
+                      }
+                      onChange={() => setActivePreset(preset.name)}
+                    ></Checkbox>
+                    <span>{preset.name}</span>
+                    <button onClick={() => setOpenListDialog(preset.name)}>
+                      Edit
+                    </button>
+                    <button onClick={() => removePreset(preset.name)}>
+                      Remove
+                    </button>
+                    <PresetEditDialog
+                      isOpen={openListDialog === preset.name}
+                      onSave={savePreset}
+                      onCancel={closeListDialog}
+                      preset={preset}
+                    />
+                  </div>
+                );
+              })}
             </div>
-            <div className="flex row center">
-              <label htmlFor="linkTemplate">Link Template:</label>
-              <input
-                style={{ flex: 1 }}
-                name="linkTemplate"
-                type="text"
-                value={updatedLinkTemplate}
-                onChange={onLinkTemplateChange}
-              />
-            </div>
+            <Button onClick={addNewPreset}>Add Preset</Button>
           </div>
           <datalist id="palette">
             {paletteColors.map((x) => (
@@ -145,9 +105,6 @@ export const SettingsDialog = (props: SettingsDialogProps) => {
         <DialogActions>
           <Button onClick={openExportDialog}>Export</Button>
           <Button onClick={openImportDialog}>Import</Button>
-          <Button variant="contained" autoFocus onClick={handleSave}>
-            Save
-          </Button>
           <Button variant="contained" onClick={handleClose}>
             Close
           </Button>
