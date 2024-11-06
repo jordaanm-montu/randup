@@ -1,13 +1,15 @@
-import { Page } from './components/Page';
-import { ListData } from './contexts/list-data-context';
+import { Page } from "./components/Page";
+import { ListData } from "./contexts/list-data-context";
+import { PresetData } from "./contexts/preset-data.context";
 
 function App() {
-
   return (
-    <ListData>
-      <Page />
-    </ListData>
-  )
+    <PresetData>
+      <ListData>
+        <Page />
+      </ListData>
+    </PresetData>
+  );
 }
 
-export default App
+export default App;

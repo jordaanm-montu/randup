@@ -1,31 +1,31 @@
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import { styled } from '@mui/material/styles';
-import React, { useContext, useState } from 'react';
-import { ListDataContext } from '../../contexts/list-data-context';
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import { styled } from "@mui/material/styles";
+import React, { useContext, useState } from "react";
+import { PresetDataContext } from "../../contexts/preset-data.context";
 
-const ImportTextArea = styled('textarea')`
+const ImportTextArea = styled("textarea")`
   width: 100%;
   min-width: 40vw;
   min-height: 50vh;
-`
+`;
 
 const loadFileAsync = (): Promise<File> => {
   return new Promise((resolve, reject) => {
-    const input = document.createElement('input');
-    input.type = 'file';
+    const input = document.createElement("input");
+    input.type = "file";
     input.onchange = () => {
-      if(input.files && input.files.length) {
+      if (input.files && input.files.length) {
         const files = Array.from(input.files);
         resolve(files[0]);
       } else {
         reject();
       }
     };
-  
+
     input.click();
   });
 };
@@ -35,19 +35,19 @@ const readFile = async (file: File): Promise<string> => {
     const reader = new FileReader();
     reader.onload = () => {
       const content = reader.result;
-      if(content) {
+      if (content) {
         resolve(content.toString());
       } else {
-        reject('File was empty');
+        reject("File was empty");
       }
     };
     reader.onerror = () => {
-      reject('Unable to read file');
+      reject("Unable to read file");
     };
 
-    reader.readAsText(file, 'utf-8');
+    reader.readAsText(file, "utf-8");
   });
-}
+};
 
 interface ImportDialogProps {
   onClose: () => void;
@@ -57,10 +57,10 @@ interface ImportDialogProps {
 export const ImportDialog = (props: ImportDialogProps) => {
   const { isOpen, onClose } = props;
 
-  const listData = useContext(ListDataContext);
-  const { updateItems, updateLinkTemplate } = listData;
+  const presetData = useContext(PresetDataContext);
+  const { setData } = presetData;
 
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
 
   const onTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
@@ -75,23 +75,26 @@ export const ImportDialog = (props: ImportDialogProps) => {
     } catch (e) {
       console.error(e);
     }
-  }
+  };
 
   const importFromText = () => {
     try {
       const settings = JSON.parse(text);
+
       //TODO: Zod Validation
-      if(settings.items){
-        updateItems(settings.items);
+      const isValid =
+        typeof settings.activePreset !== "undefined" &&
+        typeof settings.presets !== "undefined";
+      if (!isValid) {
+        return;
       }
-      if(settings.linkTemplate) {
-        updateLinkTemplate(settings.linkTemplate);
-      }
+
+      setData(settings);
       onClose();
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     }
-  }
+  };
 
   return (
     <Dialog open={isOpen}>
@@ -107,5 +110,5 @@ export const ImportDialog = (props: ImportDialogProps) => {
         </Button>
       </DialogActions>
     </Dialog>
-  )
-}
+  );
+};
