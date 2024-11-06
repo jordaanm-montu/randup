@@ -6,7 +6,6 @@ import {
   Box,
   FormControl,
   FormHelperText,
-  InputLabel,
   MenuItem,
   Select,
   Typography,
